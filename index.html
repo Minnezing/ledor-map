@@ -12,8 +12,9 @@
 </head>
 <body>
     <div class="logo">
-        <img src="./assets/logo.png" alt="Ledor" class="logo__image">
+        <img src="./assets/logo.png" alt="Ledor" class="logo__image" draggable="false">
     </div>
+
     <div class="controls">
         <div class="controls__mode active">
             <img src="./assets/path.svg" alt="Путь" title="Путь" class="mode__icon" draggable="false" id="path">
@@ -26,20 +27,25 @@
             <img src="./assets/text-label.svg" alt="Текст" title="Текст" class="mode__icon" draggable="false" id="text">
         </div>
     </div>
+
     <div class="properties">
         <p class="prop__title">Свойства: <span id="selected_mode">путь</span></p>
+
         <div class="property" id="path_property">
             <p class="prop_value">Узлов: <span id="path_nodes">0</span></p>
-            <p class="prop_value">Длина: <span id="path_length">0</span> км</p>
+            <p class="prop_value">Длина: <span id="path_length">0</span> м</p>
             <button class="prop_button" id="clear_path">Очистить узлы</button>
         </div>
+
         <div class="property" id="label_property">
 
         </div>
+        
         <div class="property" id="text_property">
 
         </div>
     </div>
+
     <canvas id="canvas"></canvas>
 </body>
 </html>

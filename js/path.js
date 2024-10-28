@@ -17,11 +17,9 @@ function drawPath(e) {
         let realX = e.clientX / scale + dragVector.x;
         let realY = e.clientY / scale + dragVector.y;
 
-        let point = pathCache.findIndex(point => ((point.x + 10) >= realX) && (realX >= (point.x - 10)) && ((point.y + 10) >= realY) && (realY >= (point.y - 10)));
+        let point = pathCache.toReversed().findIndex(point => ((point.x + 10) >= realX) && (realX >= (point.x - 10)) && ((point.y + 10) >= realY) && (realY >= (point.y - 10)));
 
-        console.log(point)
-
-        if (point != -1) pathCache.splice(point, 1);
+        if (point != -1) pathCache.splice(pathCache.length - point - 1, 1);
 
         renderMap();
     }
@@ -53,7 +51,7 @@ function renderPath() {
     })
 
     pathNodes.innerHTML = pathCache.length;
-    pathLength.innerHTML = pxToKm(length);
+    pathLength.innerHTML = pxToMeters(length);
 }
 
 clearPath.addEventListener("click", () => {

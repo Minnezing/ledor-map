@@ -72,9 +72,9 @@ function getY(coord) {
     return scale * (coord - dragVector.y);
 }
 
-function pxToKm(px) {
+function pxToMeters(px) {
     const ratio = (MAP_HEIGHT * 3.42249838) / 685;
-    return Math.floor(px / ratio);
+    return Math.floor((px / ratio) * 1000);
 }
 
 window.addEventListener("resize", () => {
