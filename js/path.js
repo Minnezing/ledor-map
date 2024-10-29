@@ -3,58 +3,86 @@ let pathNodes = document.querySelector("#path_nodes");
 let pathLength = document.querySelector("#path_length");
 let clearPath = document.querySelector("#clear_path");
 
-function drawPath(e) {
-    if (e.target.id !== "canvas") return;
-    if (e.button === 0) {
-        e.preventDefault();
-        let realX = e.clientX / scale + dragVector.x;
-        let realY = e.clientY / scale + dragVector.y;
+clearPath.addEventListener("click", () => {
+    let selectedPathLayer = getLayer(selectedLayerId); 
+    selectedPathLayer.pathCache = [];
+    renderLayers();
+})
 
-        pathCache.push({ x: realX, y: realY });
+let pathProperties = document.querySelector("#path_property");
+let layersControls = document.querySelector(".layers");
 
-        renderMap();
-    } else if (e.button === 2) {
-        let realX = e.clientX / scale + dragVector.x;
-        let realY = e.clientY / scale + dragVector.y;
+const DOT_RADIUS = 3;
 
-        let point = pathCache.toReversed().findIndex(point => ((point.x + 10) >= realX) && (realX >= (point.x - 10)) && ((point.y + 10) >= realY) && (realY >= (point.y - 10)));
+class PathLayer extends Layer {
+    constructor(params) {
+        super("path", params);
+        this.pathCache = [];
+    }
 
-        if (point != -1) pathCache.splice(pathCache.length - point - 1, 1);
+    render() {
+        let length = 0;
+        this.pathCache.forEach((point, index) => {
+            if (index != 0) {
+                let pervPoint = this.pathCache[index - 1];
 
-        renderMap();
+                ctx.lineWidth = 1 * scale;
+                ctx.beginPath();
+                ctx.moveTo(getX(point.x), getY(point.y));
+                ctx.lineTo(getX(pervPoint.x), getY(pervPoint.y));
+                ctx.stroke();
+    
+                length += Math.sqrt(Math.pow(point.x - pervPoint.x, 2) + Math.pow(point.y - pervPoint.y, 2));
+            }
+        })
+        this.pathCache.forEach(point => {
+    
+            ctx.beginPath();
+            ctx.arc(getX(point.x), getY(point.y), DOT_RADIUS * scale, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'gray';
+            ctx.fill();
+            ctx.lineWidth = 1 * scale;
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+        })
+    
+        pathNodes.innerHTML = this.pathCache.length;
+        pathLength.innerHTML = pxToMeters(length);
+    }
+
+    draw = (event) => {
+        if (event.target.id !== "canvas") return;
+        if (event.button === 0) {
+            event.preventDefault();
+            let realX = event.clientX / scale + dragVector.x;
+            let realY = event.clientY / scale + dragVector.y;
+    
+            this.pathCache.push({ x: realX, y: realY });
+    
+            renderLayers();
+        } else if (event.button === 2) {
+            let realX = event.clientX / scale + dragVector.x;
+            let realY = event.clientY / scale + dragVector.y;
+
+            let point = this.pathCache.toReversed().findIndex(point => ((point.x + DOT_RADIUS) >= realX) && (realX >= (point.x - DOT_RADIUS)) && ((point.y + DOT_RADIUS) >= realY) && (realY >= (point.y - DOT_RADIUS)));
+    
+            if (point != -1) this.pathCache.splice(pathCache.length - point - 1, 1);
+
+            renderLayers();
+        }
+    }
+
+    toolSet() {
+        modeField.innerHTML = "путь"
+        pathProperties.classList.add("active");
+        layersControls.classList.add("hidden")
+        layersControls.classList.add("closed");
+        document.addEventListener("mousedown", this.draw);
+    }
+
+    toolReset() {
+        pathProperties.classList.remove("active");
+        layersControls.classList.remove("hidden");
+        document.removeEventListener("mousedown", this.draw);
     }
 }
-
-function renderPath() {
-    let length = 0;
-    pathCache.forEach((point, index) => {
-        if (index != 0) {
-            let pervPoint = pathCache[index - 1];
-            ctx.beginPath();
-            ctx.moveTo(getX(point.x), getY(point.y));
-            ctx.lineTo(getX(pervPoint.x), getY(pervPoint.y));
-            ctx.stroke();
-
-            length += Math.sqrt(Math.pow(point.x - pervPoint.x, 2) + Math.pow(point.y - pervPoint.y, 2));
-        }
-    })
-    pathCache.forEach(point => {
-        let raius = 10;
-
-        ctx.beginPath();
-        ctx.arc(getX(point.x), getY(point.y), raius, 0, 2 * Math.PI, false);
-        ctx.fillStyle = 'gray';
-        ctx.fill();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = 'black';
-        ctx.stroke();
-    })
-
-    pathNodes.innerHTML = pathCache.length;
-    pathLength.innerHTML = pxToMeters(length);
-}
-
-clearPath.addEventListener("click", () => {
-    pathCache = [];
-    renderMap();
-})

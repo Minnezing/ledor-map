@@ -19,6 +19,7 @@ canvas.oncontextmenu = function (e) {
 };
 
 document.addEventListener("mousedown", (e) => {
+    if (e.target.id !== "canvas") return;
     if (e.button === 1) {
         e.preventDefault();
         document.querySelector("body").style.cursor = "grabbing";
@@ -27,6 +28,7 @@ document.addEventListener("mousedown", (e) => {
 })
 
 document.addEventListener("mouseup", (e) => {
+    if (e.target.id !== "canvas") return;
     if (e.button === 1) {
         document.querySelector("body").style.cursor = "auto";
         isDragging = false;
@@ -36,17 +38,19 @@ document.addEventListener("mouseup", (e) => {
 })
 
 document.addEventListener("mousemove", (e) => {
+    if (e.target.id !== "canvas") return;
     if (isDragging) {
         if (!startDragPosition) startDragPosition = { x: e.clientX, y: e.clientY };
         if (!startDragVector) startDragVector = { ...dragVector };
         dragVector.x = startDragVector.x + ((startDragPosition.x - e.clientX) * (1 / scale));
         dragVector.y = startDragVector.y + ((startDragPosition.y - e.clientY) * (1 / scale));
 
-        renderMap();
+        renderLayers();
     }
 })
 
 document.addEventListener("wheel", (e) => {
+    if (e.target.id !== "canvas") return;
     let realX = e.clientX / scale + dragVector.x;
     let realY = e.clientY / scale + dragVector.y;
     
@@ -61,7 +65,7 @@ document.addEventListener("wheel", (e) => {
     dragVector.x = realX - e.clientX / scale;
     dragVector.y = realY - e.clientY / scale;
 
-    renderMap();
+    renderLayers();
 })
 
 function getX(coord) {
@@ -81,20 +85,20 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    renderMap()
+    renderLayers()
 })
+
+let mapLayer = new Layer("default", { name: "Карта", disabled: true })
 
 let map = new Image()
 map.src = './assets/map.png';
-
-map.onload = renderMap;
 
 let resolution = map.width / map.height;
 
 let centerY = (window.innerHeight - MAP_HEIGHT) / 2;
 let centerX = (window.innerWidth - resolution * MAP_HEIGHT) / 2;
 
-function renderMap() {
+mapLayer.render = () => {
     ctx.fillStyle = "#87C1D7";
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
@@ -105,10 +109,8 @@ function renderMap() {
     let y = centerY;
 
     ctx.drawImage(map, getX(x), getY(y), width, height);
-
-    renderCustomisation();
 }
 
-function renderCustomisation() {
-    if (selectedMode == "path") renderPath();
-}
+addLayer(mapLayer)
+
+map.onload = renderLayers;

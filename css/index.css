@@ -18,12 +18,8 @@ canvas {
     display: block;
 }
 
-.controls {
-    position: absolute;
-}
-
 .logo {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
 
@@ -40,7 +36,7 @@ canvas {
 }
 
 .controls {
-    position: absolute;
+    position: fixed;
     bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
@@ -62,6 +58,9 @@ canvas {
     align-items: center;
 
     cursor: pointer;
+
+    border-radius: 10px;
+    transition: background-color .3s;
 }
 
 .controls__mode .hidden {
@@ -72,17 +71,17 @@ canvas {
 
 .controls__mode.active {
     background-color: #444;
-    border-radius: 10px;
 }
 
 .controls__mode.active .hidden {
     max-width: 100px;
     opacity: 1;
-    margin-left: 10px;
+    margin-left: 15px;
 }
 
 .controls__mode.active .hidden:nth-child(2) {
-    padding-left: 10px;
+    padding-left: 15px;
+
     border-left: 2px solid lightgray;
 }
 
@@ -90,16 +89,21 @@ canvas {
     display: block;
 
     height: 35px;
+    width: 35px;
+    object-fit: contain;
+    object-position: center;
 }
 
 .properties {
-    position: absolute;
+    position: fixed;
     right: 15px;
     top: 10px;
 
     padding: 20px 20px 20px 20px;
     background-color: var(--color);
     border-radius: 15px;
+
+    opacity: .9;
 }
 
 .property {
@@ -140,4 +144,143 @@ canvas {
 
 .property.active {
     display: flex;
+}
+
+.layers {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+
+    
+    border-radius: 15px;
+    background-color: var(--color);
+    opacity: .9;
+
+    max-height: 500px;
+    overflow: hidden;
+
+    transition: transform .4s, max-height .4s;
+}
+
+.layers.hidden {
+    transform: translateY(70px);
+}
+
+.layers__title {
+    margin: 0;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.layer {
+    display: flex;
+    width: 300px;
+    justify-content: space-between;
+
+    padding: 15px;
+
+    transition: background-color .3s;
+
+    border-top: 1px solid transparent;
+
+    cursor: pointer;
+}
+
+.layer:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.layer.active {
+    background-color: #333;
+    border-color: var(--color);
+}
+
+.layer__title {
+    color: white;
+    font-size: 16px;
+
+    margin: 0;
+}
+
+.layer__type {
+    color: white;
+    margin: 0;
+    font-size: 14px;
+    color: gray;
+}
+
+.layer__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.layer__button {
+    height: 22px;
+    width: 22px;
+
+    object-fit: contain;
+    object-position: center;
+
+    cursor: pointer;
+}
+
+.layer__move {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.layer__move * {
+    cursor: pointer;
+    width: 17px;
+}
+
+.layer.disabled .layer__actions .layer__move * {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.layer.disabled .layer__actions .layer__button {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.layer__add {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    background-color: #444;
+
+    cursor: pointer;
+}
+
+.layers__list {
+    max-height: 288px;
+    overflow-y: auto;
+    overflow-x: clip;
+    scrollbar-width: thin;
+}
+
+.layers__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px;
+    cursor: pointer;
+}
+
+#layers__toggle {
+    transition: transform .3s;
+}
+
+.layers.closed {
+    max-height: 54px;
+}
+
+.layers.closed .layers__header #layers__toggle {
+    transform: rotate(180deg);
 }

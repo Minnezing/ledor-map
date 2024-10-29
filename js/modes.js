@@ -1,41 +1,40 @@
 let modes = document.querySelectorAll(".controls__mode");
 
-let selectedMode = "path"; 
+let selectedMode = false; 
 
 modes.forEach(mode => {
     mode.addEventListener("click", (e) => {
-        modes.forEach(m => m.classList.remove("active"));
-        mode.classList.add("active");
-        console.log(mode.childNodes[1])
-        selectedMode = mode.childNodes[1].id;
-        changeMode();
+        changeMode(mode.childNodes[1].id);
     })
 })
 
 let modeField = document.querySelector("#selected_mode");
 
-let pathProperties = document.querySelector("#path_property");
 let labelProperties = document.querySelector("#label_property");
 let textProperties = document.querySelector("#text_property");
 
-function changeMode() {
-    document.removeEventListener("mousedown", drawPath);
-    pathProperties.classList.remove("active");
-    labelProperties.classList.remove("active");
-    textProperties.classList.remove("active");
+function changeMode(mode) {
+    selectedMode = mode;
 
-    if (selectedMode === "path") {
-        modeField.innerHTML = "путь"
-        pathProperties.classList.add("active");
-        document.addEventListener("mousedown", drawPath);
-    } else if (selectedMode === "label") {
-        labelProperties.classList.add("active");
-        modeField.innerHTML = "метки";
-    } else if (selectedMode === "text") {
-        textProperties.classList.add("active");
-        modeField.innerHTML = "текст";
+    modes.forEach(m => m.classList.remove("active"));
+    document.querySelector(`#${mode}`).parentElement.classList.add("active");
+
+    let layerId = getLastLayerByType(mode);
+
+    if (!layerId) {
+        switch (mode) {
+            case "path":
+                layerId = addLayer(new PathLayer({ hidden: true, disabled: true, name: "Пути" }));
+                break;
+            case "draw":
+                layerId = addLayer(new DrawLayer());
+                break;
+            default:
+                break;
+        }
     }
-    renderMap();
+
+    selectLayer(layerId);
 }
 
-changeMode();
+changeMode("path");

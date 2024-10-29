@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/index.css">
+    <script src="js/layers.js" defer></script>
     <script src="js/map.js" defer></script>
     <script src="js/path.js" defer></script>
+    <script src="js/draw.js" defer></script>
     <script src="js/labels.js" defer></script>
     <script src="js/modes.js" defer></script>
     <title>Карта</title>
@@ -20,8 +22,10 @@
             <img src="./assets/path.svg" alt="Путь" title="Путь" class="mode__icon" draggable="false" id="path">
         </div>
         <div class="controls__mode">
+            <img src="./assets/pen.svg" alt="Рисовать" title="Рисовать" class="mode__icon" draggable="false" id="draw">
+        </div>
+        <div class="controls__mode">
             <img src="./assets/label.svg" alt="Метка" title="Метка" class="mode__icon" draggable="false" id="label">
-            <img src="./assets/add.svg" alt="Добавить" title="Добавить" class="mode__icon hidden" draggable="false" id="label_add">
         </div>
         <div class="controls__mode">
             <img src="./assets/text-label.svg" alt="Текст" title="Текст" class="mode__icon" draggable="false" id="text">
@@ -40,10 +44,21 @@
         <div class="property" id="label_property">
 
         </div>
-        
+
         <div class="property" id="text_property">
 
         </div>
+    </div>
+
+    <div class="layers closed hidden">
+        <div class="layers__header">
+            <p class="layers__title">Слои</p>
+            <img src="./assets/down.svg" id="layers__toggle" draggable="false">
+        </div>
+        <div class="layer__add" id="layer_add">
+            <img src="./assets/add.svg" class="layer__add-icon">
+        </div>
+        <div class="layers__list"></div>
     </div>
 
     <canvas id="canvas"></canvas>
