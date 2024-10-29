@@ -106,6 +106,8 @@ function editLayerName(id) {
     layerTitleElement.focus();
 
     let preventEnter = (e) =>  {
+        const isValidKeyCode = [8, 16, 17, 37, 38, 39, 40, 46].includes(e.keyCode);
+        if (layerTitleElement.innerHTML.length == 18 && !isValidKeyCode) e.preventDefault();
         if (e.keyCode === 13) {
             e.preventDefault();
             layerTitleElement.blur();
