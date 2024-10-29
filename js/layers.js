@@ -73,7 +73,7 @@ function renderLayersUi() {
             <div class="layer__actions">
                 <div class="layer__move">
                     <img src="./assets/up.svg" id="move_up" class="lb" draggable="false" onclick="getLayer(${layer.id}).moveUp()">
-                    <img src="/assets/down.svg" id="move_down" class="lb" draggable="false" onclick="getLayer(${layer.id}).moveDown()">
+                    <img src="./assets/down.svg" id="move_down" class="lb" draggable="false" onclick="getLayer(${layer.id}).moveDown()">
                 </div>
                 <img src="./assets/pen.svg" class="lb layer__button" id="layer__edit" draggable="false" onclick="editLayerName(${layer.id})">
                 <img src="./assets/${!layer.visible ? "closed_" : ""}eye.svg" class="lb layer__button" id="layer__visible" draggable="false" onclick="getLayer(${layer.id}).edit({ visible: ${!layer.visible} })">
