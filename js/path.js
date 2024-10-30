@@ -12,7 +12,7 @@ clearPath.addEventListener("click", () => {
 let pathProperties = document.querySelector("#path_property");
 let layersControls = document.querySelector(".layers");
 
-const DOT_RADIUS = 3;
+const DOT_RADIUS = 10;
 
 class PathLayer extends Layer {
     constructor(params) {
@@ -26,7 +26,7 @@ class PathLayer extends Layer {
             if (index != 0) {
                 let pervPoint = this.pathCache[index - 1];
 
-                ctx.lineWidth = 1 * scale;
+                ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(getX(point.x), getY(point.y));
                 ctx.lineTo(getX(pervPoint.x), getY(pervPoint.y));
@@ -36,12 +36,11 @@ class PathLayer extends Layer {
             }
         })
         this.pathCache.forEach(point => {
-    
             ctx.beginPath();
-            ctx.arc(getX(point.x), getY(point.y), DOT_RADIUS * scale, 0, 2 * Math.PI, false);
+            ctx.arc(getX(point.x), getY(point.y), DOT_RADIUS, 0, 2 * Math.PI, false);
             ctx.fillStyle = 'gray';
             ctx.fill();
-            ctx.lineWidth = 1 * scale;
+            ctx.lineWidth = Math.min(Math.max(2, 1 / scale), 3);
             ctx.strokeStyle = 'black';
             ctx.stroke();
         })

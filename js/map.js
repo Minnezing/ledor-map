@@ -4,11 +4,11 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let dragVector = { x: 0, y: 0 };
-let scale = 1;
-const MAX_SCALE = 7;
+let scale = 0.5;
+const MAX_SCALE = 500;
 const MIN_SCALE = 0.2;
 
-const MAP_HEIGHT = 685
+const MAP_HEIGHT = window.innerHeight / scale - 100;
 
 let isDragging = false;
 let startDragPosition = false;
@@ -95,8 +95,8 @@ map.src = './assets/map.png';
 
 let resolution = map.width / map.height;
 
-let centerY = (window.innerHeight - MAP_HEIGHT) / 2;
-let centerX = (window.innerWidth - resolution * MAP_HEIGHT) / 2;
+let centerY = (window.innerHeight / scale - MAP_HEIGHT) / 2;
+let centerX = (window.innerWidth / scale - resolution * MAP_HEIGHT) / 2;
 
 mapLayer.render = () => {
     ctx.fillStyle = "#87C1D7";
