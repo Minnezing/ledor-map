@@ -60,10 +60,7 @@ class PathLayer extends Layer {
     
             renderLayers();
         } else if (event.button === 2) {
-            let realX = event.clientX / scale + dragVector.x;
-            let realY = event.clientY / scale + dragVector.y;
-
-            let point = this.pathCache.toReversed().findIndex(point => ((point.x + DOT_RADIUS) >= realX) && (realX >= (point.x - DOT_RADIUS)) && ((point.y + DOT_RADIUS) >= realY) && (realY >= (point.y - DOT_RADIUS)));
+            let point = this.pathCache.toReversed().findIndex(point => ((getX(point.x) + DOT_RADIUS) >= event.clientX) && (event.clientX >= (getX(point.x) - DOT_RADIUS)) && ((getY(point.y) + DOT_RADIUS) >= event.clientY) && (event.clientY >= (getY(point.y) - DOT_RADIUS)));
     
             if (point != -1) this.pathCache.splice(pathCache.length - point - 1, 1);
 
